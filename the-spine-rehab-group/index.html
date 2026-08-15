@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Spine & Rehab Group | Plumber in Paramus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080a0f;
+    --card:#0e1018;
+    --card-raised:#12141d;
+    --border:#1c2029;
+    --border-strong:#2a2f3b;
+    --text:#f5f6f8;
+    --text-dim:#98a0ad;
+    --text-faint:#565c69;
+    --orange:#f97316;
+    --orange-deep:#c2570f;
+    --green:#25d366;
+    --line:#191d26;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 1.5px 1.5px, rgba(255,255,255,0.028) 1px, transparent 0);
+    background-size:26px 26px;
+  }
+
+  h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  button{font-family:inherit;}
+  ::selection{background:var(--orange);color:#0a0a0a;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- reveal / stamp-in ---------- */
+  .stamp{
+    opacity:0;
+    transform:translateY(22px) rotate(-1.4deg) scale(.97);
+    transition:opacity .6s cubic-bezier(.16,.8,.3,1), transform .6s cubic-bezier(.16,.8,.3,1);
+  }
+  .stamp.is-visible{opacity:1;transform:translateY(0) rotate(0deg) scale(1);}
+  .stamp.tilt-r.is-visible{transform:translateY(0) rotate(.6deg) scale(1);}
+
+  @media (prefers-reduced-motion: reduce){
+    .stamp{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- perforated ticket edge ---------- */
+  .perf-bottom{position:relative;}
+  .perf-bottom::after{
+    content:'';
+    position:absolute;
+    left:0;right:0;bottom:-1px;
+    height:14px;
+    background-image:radial-gradient(circle, var(--bg) 5px, transparent 5.5px);
+    background-size:18px 14px;
+    background-position:0 -7px;
+    background-repeat:repeat-x;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:fixed;top:0;left:0;right:0;z-index:1000;
+    background:rgba(8,10,15,0.88);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:13px 24px;max-width:1180px;margin:0 auto;gap:10px;
+  }
+  .logo{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:18px;
+    display:flex;align-items:center;gap:8px;white-space:nowrap;
+  }
+  .logo-mark{
+    width:9px;height:9px;background:var(--orange);
+    flex-shrink:0;
+  }
+  .nav-actions{display:flex;gap:8px;align-items:center;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-weight:600;font-size:14px;padding:11px 18px;
+    border-radius:3px;border:1px solid transparent;cursor:pointer;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease;
+    white-space:nowrap;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn:focus-visible{outline:2px solid var(--orange);outline-offset:2px;}
+  .btn-call{background:var(--orange);color:#0a0a0a;}
+  .btn-call:hover{background:#fb8a3c;}
+  .btn-whatsapp{background:var(--green);color:#08150d;}
+  .btn-whatsapp:hover{background:#38dd77;}
+  .btn-lg{padding:16px 26px;font-size:15.5px;}
+  .nav-call-text{display:none;}
+  @media (min-width:640px){.nav-call-text{display:inline;}}
+
+  /* ---------- HERO — dispatch board ---------- */
+  .hero{
+    padding:132px 0 0;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:0;
+    border-top:1px solid var(--border);
+  }
+  @media (min-width:900px){
+    .hero-grid{grid-template-columns:1.5fr 1fr;}
+  }
+
+  .hero-main{
+    padding:44px 0 48px;
+  }
+  @media (min-width:900px){
+    .hero-main{padding:56px 48px 56px 0;border-right:1px solid var(--border);}
+  }
+
+  .dispatch-tag{
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:22px;
+  }
+  .dispatch-tag .dot{
+    width:7px;height:7px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 3px rgba(37,211,102,0.15);
+    flex-shrink:0;
+  }
+  .dispatch-tag span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--text-dim);
+  }
+  .dispatch-tag .niche-chip{
+    color:var(--orange);
+  }
+
+  .hero h1{
+    font-size:clamp(32px, 5.6vw, 52px);
+    font-weight:700;line-height:1.05;
+    max-width:640px;margin-bottom:18px;
+  }
+  .hero h1 .accent{color:var(--orange);}
+
+  .hero-sub{
+    font-size:16.5px;color:var(--text-dim);max-width:520px;margin-bottom:32px;
+  }
+
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:12px;}
+
+  /* dispatch board side card */
+  .board{
+    padding:0 0 40px;
+  }
+  @media (min-width:900px){
+    .board{padding:56px 0 56px 48px;}
+  }
+  .board-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--text-faint);margin-bottom:16px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .board-list{display:flex;flex-direction:column;}
+  .board-row{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px dashed var(--border);
+    font-size:14px;
+  }
+  .board-row:first-child{border-top:1px dashed var(--border);}
+  .board-row .k{color:var(--text-dim);}
+  .board-row .v{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:600;color:var(--text);
+    text-align:right;
+  }
+  .board-row .v.hot{color:var(--orange);}
+  .board-row .v.go{color:var(--green);}
+
+  /* ---------- SECTION shared ---------- */
+  section{padding:72px 0;border-top:1px solid var(--border);}
+  .section-head{
+    display:flex;flex-direction:column;
+    max-width:640px;margin-bottom:40px;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--orange);margin-bottom:12px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:'';width:16px;height:1px;background:var(--orange);}
+  .section-head h2{
+    font-size:clamp(25px, 3.6vw, 34px);font-weight:700;margin-bottom:10px;
+  }
+  .section-head p{color:var(--text-dim);font-size:15px;}
+
+  /* ---------- SERVICES — ticket stack ---------- */
+  .ticket-grid{
+    display:grid;grid-template-columns:1fr;gap:16px;
+  }
+  @media (min-width:640px){.ticket-grid{grid-template-columns:1fr 1fr;}}
+  @media (min-width:980px){.ticket-grid{grid-template-columns:repeat(3,1fr);}}
+
+  .ticket{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:6px 6px 0 0;
+    padding:22px 20px 26px;
+    position:relative;
+  }
+  .ticket:hover{border-color:var(--border-strong);}
+  .ticket-top{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .ticket-icon{
+    font-size:22px;width:42px;height:42px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(249,115,22,0.08);
+    border:1px solid rgba(249,115,22,0.2);
+    border-radius:5px;
+  }
+  .ticket-no{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--text-faint);
+    padding-top:4px;
+  }
+  .ticket h3{font-size:16.5px;font-weight:600;margin-bottom:8px;}
+  .ticket p{font-size:13.5px;color:var(--text-dim);margin-bottom:16px;}
+  .ticket-tag{
+    font-family:'JetBrains Mono',monospace;
+    display:inline-block;font-size:11px;font-weight:600;letter-spacing:0.03em;
+    color:var(--text-faint);border:1px solid var(--border);
+    padding:4px 9px;border-radius:3px;
+  }
+
+  /* ---------- REVIEWS — job-completion slips ---------- */
+  .reviews-section{background:var(--card);}
+  .reviews-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media (min-width:860px){.reviews-grid{grid-template-columns:repeat(3,1fr);}}
+
+  .slip{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:0;
+    overflow:hidden;
+  }
+  .slip-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px dashed var(--border);
+    background:rgba(255,255,255,0.015);
+  }
+  .slip-head .status{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--green);
+    display:flex;align-items:center;gap:6px;
+  }
+  .slip-head .status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);}
+  .slip-stars{color:var(--orange);font-size:12.5px;letter-spacing:1.5px;}
+  .slip-body{padding:20px 18px;}
+  .slip-body p{font-size:14.5px;color:var(--text);margin-bottom:18px;}
+  .slip-signer{display:flex;align-items:center;gap:10px;}
+  .signer-avatar{
+    width:34px;height:34px;border-radius:50%;
+    background:linear-gradient(135deg, var(--orange), var(--orange-deep));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12.5px;color:#0a0a0a;
+    flex-shrink:0;
+  }
+  .signer-name{font-weight:600;font-size:13.5px;}
+  .signer-source{font-size:11.5px;color:var(--text-faint);}
+
+  /* ---------- WHY US ---------- */
+  .why-list{
+    display:grid;grid-template-columns:1fr;gap:1px;
+    background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  }
+  @media (min-width:640px){.why-list{grid-template-columns:1fr 1fr;}}
+  @media (min-width:980px){.why-list{grid-template-columns:repeat(4,1fr);}}
+  .why-item{
+    background:var(--card);padding:26px 20px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .why-item .num{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--orange);font-weight:600;
+  }
+  .why-item h3{font-size:15.5px;font-weight:600;}
+  .why-item p{font-size:13px;color:var(--text-dim);}
+
+  /* ---------- CONTACT ---------- */
+  .contact-grid{
+    display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:28px;
+  }
+  @media (min-width:780px){.contact-grid{grid-template-columns:repeat(3,1fr);}}
+  .contact-card{
+    background:var(--card);border:1px solid var(--border);border-radius:8px;
+    padding:22px;display:flex;flex-direction:column;gap:8px;
+    transition:border-color .2s ease;
+  }
+  .contact-card:hover{border-color:var(--border-strong);}
+  .contact-card .label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;
+  }
+  .contact-card .value{font-size:16px;font-weight:600;font-family:'Space Grotesk',sans-serif;}
+
+  .contact-cta{
+    background:var(--card-raised);
+    border:1px solid var(--border-strong);
+    border-radius:10px;
+    padding:40px 28px;text-align:center;
+    position:relative;
+  }
+  .contact-cta::before{
+    content:'';position:absolute;top:0;left:24px;right:24px;height:1px;
+    background:linear-gradient(90deg, transparent, var(--orange), transparent);
+  }
+  .contact-cta h3{font-size:clamp(22px,3.4vw,28px);font-weight:700;margin-bottom:10px;}
+  .contact-cta p{color:var(--text-dim);font-size:14.5px;margin-bottom:26px;}
+  .contact-cta-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--border);padding:30px 0;}
+  .footer-inner{
+    display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;
+  }
+  @media (min-width:640px){
+    .footer-inner{flex-direction:row;justify-content:space-between;text-align:left;}
+  }
+  .footer-inner .fname{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14.5px;}
+  .footer-inner .fmeta{font-size:12.5px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- FLOATING WHATSAPP ---------- */
+  .float-whatsapp{
+    position:fixed;bottom:22px;right:22px;z-index:999;
+    width:56px;height:56px;background:var(--green);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 20px rgba(37,211,102,0.4);
+  }
+  .float-whatsapp:focus-visible{outline:2px solid #fff;outline-offset:3px;}
+  .float-whatsapp svg{width:27px;height:27px;}
+  .float-whatsapp::before{
+    content:'';position:absolute;inset:0;border-radius:50%;background:var(--green);
+    animation:pulse 2.2s ease-out infinite;z-index:-1;
+  }
+  @keyframes pulse{0%{transform:scale(1);opacity:0.55;}100%{transform:scale(2.1);opacity:0;}}
+  @media (prefers-reduced-motion: reduce){.float-whatsapp::before{animation:none;}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo"><span class="logo-mark"></span>The Spine & Rehab Group</div>
+    <div class="nav-actions">
+      <a href="https://wa.me/12015239590" class="btn btn-whatsapp" aria-label="Message on WhatsApp">WhatsApp</a>
+      <a href="tel:+1-201-523-9590" class="btn btn-call">
+        <span class="nav-call-text">Call Now</span><span>&#128222;</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-main">
+        <div class="dispatch-tag stamp">
+          <span class="dot"></span>
+          <span>Dispatching now &middot; <span class="niche-chip">Plumber</span> &middot; Paramus</span>
+        </div>
+        <h1 class="stamp">Call it in. <span class="accent">We show up.</span></h1>
+        <p class="hero-sub stamp">The Spine & Rehab Group handles Plumber jobs across Paramus with straight pricing and no callback runaround. Ring us or send a WhatsApp &mdash; a real person answers.</p>
+        <div class="hero-ctas stamp">
+          <a href="tel:+1-201-523-9590" class="btn btn-call btn-lg">&#128222; Call +1-201-523-9590</a>
+          <a href="https://wa.me/12015239590" class="btn btn-whatsapp btn-lg">&#128172; WhatsApp Us</a>
+        </div>
+      </div>
+
+      <div class="board">
+        <div class="board-label stamp tilt-r">
+          <span>Job Sheet</span>
+          <span class="mono">#25+</span>
+        </div>
+        <div class="board-list stamp tilt-r">
+          <div class="board-row">
+            <span class="k">Rating</span>
+            <span class="v hot">5.0 / 5 &#9733;</span>
+          </div>
+          <div class="board-row">
+            <span class="k">Reviews on file</span>
+            <span class="v">25</span>
+          </div>
+          <div class="board-row">
+            <span class="k">Response time</span>
+            <span class="v go">Same-day</span>
+          </div>
+          <div class="board-row">
+            <span class="k">Coverage</span>
+            <span class="v">Insured &amp; licensed</span>
+          </div>
+          <div class="board-row">
+            <span class="k">Based in</span>
+            <span class="v">Paramus</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head stamp">
+      <span class="eyebrow">Work Orders</span>
+      <h2>Services we run in Paramus</h2>
+      <p>Every line here is real work we take on &mdash; not a padded list. Ask if yours isn't shown.</p>
+    </div>
+    <div class="ticket-grid">
+      <div class="ticket stamp">
+        <div class="ticket-top">
+          <div class="ticket-icon">&#128295;</div>
+          <span class="ticket-no mono">JOB-01</span>
+        </div>
+        <h3>Leak Detection & Repair</h3>
+        <p>Straightforward work, quoted clearly before we start.</p>
+        <span class="ticket-tag">MOST REQUESTED</span>
+      </div>
+      <div class="ticket stamp">
+        <div class="ticket-top">
+          <div class="ticket-icon">&#128736;&#65039;</div>
+          <span class="ticket-no mono">JOB-02</span>
+        </div>
+        <h3>Burst Pipe Repairs</h3>
+        <p>Handled by the same team, start to finish.</p>
+        <span class="ticket-tag">FIXED QUOTE</span>
+      </div>
+      <div class="ticket stamp">
+        <div class="ticket-top">
+          <div class="ticket-icon">&#9889;</div>
+          <span class="ticket-no mono">JOB-03</span>
+        </div>
+        <h3>Drain Unblocking</h3>
+        <p>Fast turnaround when something can't wait.</p>
+        <span class="ticket-tag">RAPID CALLOUT</span>
+      </div>
+      <div class="ticket stamp">
+        <div class="ticket-top">
+          <div class="ticket-icon">&#128737;&#65039;</div>
+          <span class="ticket-no mono">JOB-04</span>
+        </div>
+        <h3>Bathroom Fitting</h3>
+        <p>Done right the first time, with a clear guarantee.</p>
+        <span class="ticket-tag">GUARANTEED</span>
+      </div>
+      <div class="ticket stamp">
+        <div class="ticket-top">
+          <div class="ticket-icon">&#128203;</div>
+          <span class="ticket-no mono">JOB-05</span>
+        </div>
+        <h3>Tap & Cistern Repairs</h3>
+        <p>A proper on-site look before any work begins.</p>
+        <span class="ticket-tag">FREE ASSESSMENT</span>
+      </div>
+      <div class="ticket stamp">
+        <div class="ticket-top">
+          <div class="ticket-icon">&#9878;&#65039;</div>
+          <span class="ticket-no mono">JOB-06</span>
+        </div>
+        <h3>Central Heating</h3>
+        <p>Ongoing support, not just one-off callouts.</p>
+        <span class="ticket-tag">ONGOING CARE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews-section" id="reviews">
+  <div class="wrap">
+    <div class="section-head stamp">
+      <span class="eyebrow">Closed Jobs</span>
+      <h2>What Paramus says after the work's done</h2>
+      <p>Feedback pulled straight from recent jobs. 25 reviews and counting.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="slip stamp">
+        <div class="slip-head">
+          <span class="status">Job Closed</span>
+          <span class="slip-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        </div>
+        <div class="slip-body">
+          <p>"Prompt, tidy and fairly priced — The Spine & Rehab Group sorted the job quickly and explained everything clearly."</p>
+          <div class="slip-signer">
+            <div class="signer-avatar">V</div>
+            <div>
+              <div class="signer-name">Verified Customer</div>
+              <div class="signer-source">Customer Review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slip stamp">
+        <div class="slip-head">
+          <span class="status">Job Closed</span>
+          <span class="slip-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        </div>
+        <div class="slip-body">
+          <p>"Professional from the first call. Would happily recommend The Spine & Rehab Group to anyone in Paramus."</p>
+          <div class="slip-signer">
+            <div class="signer-avatar">V</div>
+            <div>
+              <div class="signer-name">Verified Customer</div>
+              <div class="signer-source">Customer Review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slip stamp">
+        <div class="slip-head">
+          <span class="status">Job Closed</span>
+          <span class="slip-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        </div>
+        <div class="slip-body">
+          <p>"On time, honest pricing, and the work was done properly. Five stars from us."</p>
+          <div class="slip-signer">
+            <div class="signer-avatar">V</div>
+            <div>
+              <div class="signer-name">Verified Customer</div>
+              <div class="signer-source">Customer Review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why-us">
+  <div class="wrap">
+    <div class="section-head stamp">
+      <span class="eyebrow">On File</span>
+      <h2>Why Paramus keeps calling us back</h2>
+      <p>No gimmicks &mdash; just what makes a job go smoothly.</p>
+    </div>
+    <div class="why-list">
+      <div class="why-item stamp">
+        <span class="num mono">01</span>
+        <h3>Fast response</h3>
+        <p>Message or call and hear back same day, most days within the hour.</p>
+      </div>
+      <div class="why-item stamp">
+        <span class="num mono">02</span>
+        <h3>Upfront pricing</h3>
+        <p>You get a clear quote before work starts &mdash; no surprises on the invoice.</p>
+      </div>
+      <div class="why-item stamp">
+        <span class="num mono">03</span>
+        <h3>Insured &amp; licensed</h3>
+        <p>Fully covered work, so you're protected start to finish.</p>
+      </div>
+      <div class="why-item stamp">
+        <span class="num mono">04</span>
+        <h3>Local to Paramus</h3>
+        <p>We know the area and turn up when we say we will.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head stamp">
+      <span class="eyebrow">Dispatch</span>
+      <h2>Get a job on the board</h2>
+      <p>Pick whichever's easiest &mdash; phone, WhatsApp, or come find us.</p>
+    </div>
+    <div class="contact-grid">
+      <a href="tel:+1-201-523-9590" class="contact-card stamp">
+        <span class="label">Phone</span>
+        <span class="value">+1-201-523-9590</span>
+      </a>
+      <a href="https://wa.me/12015239590" class="contact-card stamp">
+        <span class="label">WhatsApp</span>
+        <span class="value">Message us</span>
+      </a>
+      <div class="contact-card stamp">
+        <span class="label">Address</span>
+        <span class="value">140 NJ-17, NJ</span>
+      </div>
+    </div>
+
+    <div class="contact-cta stamp">
+      <h3>Need Plumber in Paramus?</h3>
+      <p>Call now or send a WhatsApp message &mdash; we'll get back to you the same day.</p>
+      <div class="contact-cta-btns">
+        <a href="tel:+1-201-523-9590" class="btn btn-call btn-lg">&#128222; Call +1-201-523-9590</a>
+        <a href="https://wa.me/12015239590" class="btn btn-whatsapp btn-lg">&#128172; WhatsApp Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>
+      <div class="fname">The Spine & Rehab Group</div>
+      <div class="fmeta">Plumber &middot; Paramus</div>
+    </div>
+    <div class="fmeta">140 NJ-17, NJ</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/12015239590" class="float-whatsapp" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="#08150d"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.05 2C6.502 2 2 6.477 2 11.99c0 1.973.583 3.808 1.586 5.35L2 22l4.79-1.55A10.02 10.02 0 0 0 12.05 22C17.598 22 22.1 17.523 22.1 12.01 22.1 6.477 17.598 2 12.05 2zm0 18.19a8.13 8.13 0 0 1-4.393-1.29l-.315-.19-3.109 1.006 1.023-3.017-.207-.31A8.13 8.13 0 0 1 3.85 11.99c0-4.508 3.679-8.17 8.2-8.17 4.522 0 8.2 3.662 8.2 8.17 0 4.508-3.678 8.2-8.2 8.2z"/></svg>
+</a>
+
+<script>
+  (function(){
+    var els = document.querySelectorAll('.stamp');
+    if(!('IntersectionObserver' in window)){
+      els.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    els.forEach(function(el, i){
+      el.style.transitionDelay = (Math.min(i % 6, 5) * 55) + 'ms';
+      observer.observe(el);
+    });
+  })();
+</script>
+
+</body>
+</html>
